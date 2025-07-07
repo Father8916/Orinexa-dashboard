@@ -744,7 +744,7 @@ const filterServiceRequests = (requests) => {
           </div>
           <div className="mt-6 flex items-center justify-between">
             <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Available Credits: <span className="font-medium text-green-400">{clientData["Remaining Credit"] || 0} points</span>
+              Available Credits: <span className="font-medium text-green-400">{clientData["Remaining Points"] || 0} points</span>
             </div>
             <button 
               onClick={handleSubmitRequest}
