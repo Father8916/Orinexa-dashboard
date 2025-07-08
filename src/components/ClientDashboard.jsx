@@ -459,7 +459,7 @@ const filterServiceRequests = (requests) => {
     value={(clientData["Total Points"] || 0).toLocaleString()}
     icon={Star}
     color="text-blue-400"
-    subtitle={clientData["Joined Date"] ? `Joined ${new Date(clientData["Joined Date"]).toLocaleDateString()}` : "No expiry"}
+    subtitle={clientData["Credit Validity Until"] ? `Expires on ${new Date(clientData["Credit Validity Until"]).toLocaleDateString()}` : "No expiry"}
   />
   <CreditCard
     title="Used Credits"
