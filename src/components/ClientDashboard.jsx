@@ -31,6 +31,11 @@ const Dashboard = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [purchases, setPurchases] = useState([]);
 
+  const [supportSubject, setSupportSubject] = useState('');
+  const [supportPriority, setSupportPriority] = useState('Low');
+  const [supportMessage, setSupportMessage] = useState('');
+
+
  // Airtable keys from .env
   const apiKey = import.meta.env.VITE_AIRTABLE_TOKEN;
   const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
@@ -166,6 +171,38 @@ useEffect(() => {
 
   loadPurchases();
 }, [userEmail]);
+
+ const handleSubmitSupportTicket = async () => {
+  if (!supportSubject || !supportMessage) {
+    showToast('Please fill all required fields', 'error');
+    return;
+  }
+
+  const payload = {
+    name: clientData["Client Name"],
+    email: clientData["Email"],
+    subject: supportSubject,
+    priority: supportPriority,
+    message: supportMessage,
+    submittedAt: new Date().toISOString()
+  };
+
+  try {
+    const response = await fetch(import.meta.env.VITE_MAKE_WEBHOOK_SUPPORT_TICKET, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    showToast('Support ticket submitted successfully!', 'success');
+    setSupportSubject('');
+    setSupportPriority('Low');
+    setSupportMessage('');
+  } catch (error) {
+    console.error('Support ticket error:', error);
+    showToast('Submission failed (demo mode)', 'error');
+  }
+};
 
   // Access fields from Airtable record
   const clientData = airtableClients[0]?.fields || {};
@@ -1027,7 +1064,8 @@ const filterServiceRequests = (requests) => {
               <label className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Name</label>
               <input 
                 type="text" 
-                value={clientData.Name || ''}
+                value={clientData["Client Name"] || ''}
+                readOnly
                 className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               />
             </div>
@@ -1036,6 +1074,7 @@ const filterServiceRequests = (requests) => {
               <input 
                 type="email" 
                 value={clientData.Email || ''}
+                readOnly
                 className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               />
             </div>
@@ -1044,12 +1083,17 @@ const filterServiceRequests = (requests) => {
               <input 
                 type="text" 
                 placeholder="How can we help?"
-                className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                value={supportSubject}
+                onChange={ (e) => setSupportSubject(e.target.value) }
+                className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`} 
               />
             </div>
             <div>
               <label className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Priority</label>
-              <select className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}>
+              <select 
+                value={supportPriority}
+                onChange={(e) => setSupportPriority(e.target.value)}
+                className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}>
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
@@ -1061,10 +1105,14 @@ const filterServiceRequests = (requests) => {
               <textarea 
                 rows={4}
                 placeholder="Describe your issue or question..."
+                value={supportMessage}
+                onChange={(e) => setSupportMessage(e.target.value)}
                 className={`w-full px-3 py-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-gray-900'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               ></textarea>
             </div>
-            <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+            <button
+              onClick={handleSubmitSupportTicket}
+            className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
               Submit Ticket
             </button>
           </div>
