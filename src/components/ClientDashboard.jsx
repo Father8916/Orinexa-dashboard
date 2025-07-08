@@ -179,10 +179,10 @@ useEffect(() => {
   ];
 
   const packages = [
-    { name: "Starter", price: 350, credits: 350, bonus: 0 },
-    { name: "Growth", price: 700, credits: 700, bonus: 70, popular: true },
-    { name: "Scale", price: 1400, credits: 1400, bonus: 150 },
-    { name: "Pro", price: 2800, credits: 2500, bonus: 350 }
+    { name: "Starter", price: 350, credits: 350, bonus: 0, link: "https://buy.stripe.com/5kQ8wOdn439x5wB3l1bII01" },
+    { name: "Growth", price: 700, credits: 700, bonus: 70, popular: true, link: "https://buy.stripe.com/dRm28q5UCbG3gbfdZFbII03" },
+    { name: "Scale", price: 1400, credits: 1400, bonus: 150, link: "https://buy.stripe.com/9B614m96O11pf7bg7NbII04" },
+    { name: "Pro", price: 2800, credits: 2800, bonus: 350, link: "https://buy.stripe.com/14A14m5UC5hF2kp8FlbII05" }
   ];
 
   const navigation = [
@@ -589,9 +589,11 @@ const filterServiceRequests = (requests) => {
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
                   {pkg.credits} credits {pkg.bonus > 0 && `+ ${pkg.bonus} bonus`}
                 </p>
-                <button className={`w-full mt-4 px-4 py-2 ${pkg.popular ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-700'} text-white font-medium rounded-lg transition-colors`}>
+                <a href={pkg.link} target="_blank" rel="noopener noreferrer"
+                className={`w-full mt-4 px-4 py-2 ${pkg.popular ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 hover:bg-gray-700'} text-white font-medium rounded-lg transition-colors`}
+                >
                   Buy Now
-                </button>
+                </a>
               </div>
             </div>
           ))}
