@@ -495,7 +495,7 @@ const filterServiceRequests = (requests) => {
             </button>
           </div>
           <div className="space-y-4">
-            {appointments.map((appointment, index) => (
+            {appointments.slice(0, 3).map((appointment, index) => (
               <div key={index} className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700/50' : 'bg-gray-50'} hover:scale-[1.02] transition-all duration-200`}>
                 <div className="flex items-center justify-between">
                   <div>
@@ -522,7 +522,7 @@ const filterServiceRequests = (requests) => {
             </button>
           </div>
           <div className="space-y-4">
-            {serviceRequests.map((request, index) => (
+            {serviceRequests.slice(0, 3).map((request, index) => (
               <div key={index} className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700/50' : 'bg-gray-50'} hover:scale-[1.02] transition-all duration-200`}>
                 <div className="flex items-center justify-between">
                   <div>
